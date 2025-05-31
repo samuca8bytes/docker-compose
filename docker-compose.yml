@@ -1,0 +1,273 @@
+version: '3.8'
+
+services:
+  # Grupo 1
+  zabbix1-db:
+    image: postgres:15
+    container_name: zabbix1-db
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      POSTGRES_DB: zabbix
+    volumes:
+      - zabbix1-db-data:/var/lib/postgresql/data
+    networks:
+      - zabbix-net
+
+  zabbix-server1:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix-server1
+    environment:
+      DB_SERVER_HOST: zabbix1-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_NAME: "Zabbix Server 1"
+    ports:
+      - "10051:10051"
+    depends_on:
+      - zabbix1-db
+    networks:
+      - zabbix-net
+
+  zabbix-web1:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix-web1
+    environment:
+      DB_SERVER_HOST: zabbix1-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_HOST: zabbix-server1
+      PHP_TZ: America/Sao_Paulo
+    ports:
+      - "8080:8080"
+    depends_on:
+      - zabbix-server1
+    networks:
+      - zabbix-net
+
+  grafana1:
+    image: grafana/grafana:latest
+    container_name: grafana1
+    ports:
+      - "3000:3000"
+    networks:
+      - zabbix-net
+
+  # Grupo 2
+  zabbix2-db:
+    image: postgres:15
+    container_name: zabbix2-db
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      POSTGRES_DB: zabbix
+    volumes:
+      - zabbix2-db-data:/var/lib/postgresql/data
+    networks:
+      - zabbix-net
+
+  zabbix-server2:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix-server2
+    environment:
+      DB_SERVER_HOST: zabbix2-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_NAME: "Zabbix Server 2"
+    ports:
+      - "10052:10051"
+    depends_on:
+      - zabbix2-db
+    networks:
+      - zabbix-net
+
+  zabbix-web2:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix-web2
+    environment:
+      DB_SERVER_HOST: zabbix2-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_HOST: zabbix-server2
+      PHP_TZ: America/Sao_Paulo
+    ports:
+      - "8081:8080"
+    depends_on:
+      - zabbix-server2
+    networks:
+      - zabbix-net
+
+  grafana2:
+    image: grafana/grafana:latest
+    container_name: grafana2
+    ports:
+      - "3001:3000"
+    networks:
+      - zabbix-net
+
+  # Grupo 3
+  zabbix3-db:
+    image: postgres:15
+    container_name: zabbix3-db
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      POSTGRES_DB: zabbix
+    volumes:
+      - zabbix3-db-data:/var/lib/postgresql/data
+    networks:
+      - zabbix-net
+
+  zabbix-server3:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix-server3
+    environment:
+      DB_SERVER_HOST: zabbix3-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_NAME: "Zabbix Server 3"
+    ports:
+      - "10053:10051"
+    depends_on:
+      - zabbix3-db
+    networks:
+      - zabbix-net
+
+  zabbix-web3:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix-web3
+    environment:
+      DB_SERVER_HOST: zabbix3-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_HOST: zabbix-server3
+      PHP_TZ: America/Sao_Paulo
+    ports:
+      - "8082:8080"
+    depends_on:
+      - zabbix-server3
+    networks:
+      - zabbix-net
+
+  grafana3:
+    image: grafana/grafana:latest
+    container_name: grafana3
+    ports:
+      - "3002:3000"
+    networks:
+      - zabbix-net
+
+  # Grupo 4
+  zabbix4-db:
+    image: postgres:15
+    container_name: zabbix4-db
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      POSTGRES_DB: zabbix
+    volumes:
+      - zabbix4-db-data:/var/lib/postgresql/data
+    networks:
+      - zabbix-net
+
+  zabbix-server4:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix-server4
+    environment:
+      DB_SERVER_HOST: zabbix4-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_NAME: "Zabbix Server 4"
+    ports:
+      - "10054:10051"
+    depends_on:
+      - zabbix4-db
+    networks:
+      - zabbix-net
+
+  zabbix-web4:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix-web4
+    environment:
+      DB_SERVER_HOST: zabbix4-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_HOST: zabbix-server4
+      PHP_TZ: America/Sao_Paulo
+    ports:
+      - "8083:8080"
+    depends_on:
+      - zabbix-server4
+    networks:
+      - zabbix-net
+
+  grafana4:
+    image: grafana/grafana:latest
+    container_name: grafana4
+    ports:
+      - "3003:3000"
+    networks:
+      - zabbix-net
+
+  # Grupo 5
+  zabbix5-db:
+    image: postgres:15
+    container_name: zabbix5-db
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      POSTGRES_DB: zabbix
+    volumes:
+      - zabbix5-db-data:/var/lib/postgresql/data
+    networks:
+      - zabbix-net
+
+  zabbix-server5:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix-server5
+    environment:
+      DB_SERVER_HOST: zabbix5-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_NAME: "Zabbix Server 5"
+    ports:
+      - "10055:10051"
+    depends_on:
+      - zabbix5-db
+    networks:
+      - zabbix-net
+
+  zabbix-web5:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix-web5
+    environment:
+      DB_SERVER_HOST: zabbix5-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_HOST: zabbix-server5
+      PHP_TZ: America/Sao_Paulo
+    ports:
+      - "8084:8080"
+    depends_on:
+      - zabbix-server5
+    networks:
+      - zabbix-net
+
+  grafana5:
+    image: grafana/grafana:latest
+    container_name: grafana5
+    ports:
+      - "3004:3000"
+    networks:
+      - zabbix-net
+
+volumes:
+  zabbix1-db-data:
+  zabbix2-db-data:
+  zabbix3-db-data:
+  zabbix4-db-data:
+  zabbix5-db-data:
+
+networks:
+  zabbix-net:
+    driver: bridge
